@@ -1,0 +1,4 @@
+#!/bin/env bash
+
+echo 2 | tee /sys/module/hid_apple/parameters/fnmode
+/usr/bin/setxkbmap -option "ctrl:swapcaps"
