@@ -1,0 +1,16 @@
+bat
+curl
+fd-find
+fonts-powerline
+fzf
+git
+highlight
+ripgrep
+rlwrap
+silversearcher-ag
+tig
+tree
+urlview
+wget
+xclip
+xsel
