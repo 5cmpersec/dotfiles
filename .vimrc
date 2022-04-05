@@ -1,21 +1,15 @@
+"{{{ basic settings
 set nocompatible
 set encoding=utf-8
 
-if has('filetype')
-    filetype indent plugin on
-endif
-
-if has('syntax')
-    syntax on
-endif
-
-if has('mouse')
-    set mouse=a
-endif
+filetype indent plugin on
+syntax on
+set mouse=a
 
 set hidden
 set wildmenu
 set wildmode=longest:full,full
+set wildoptions=pum
 set list
 set listchars=tab:▸\ ,trail:·
 set showcmd
@@ -26,7 +20,6 @@ set smartcase
 set backspace=indent,eol,start
 set autoindent
 set nostartofline
-set cmdheight=2
 set number
 set relativenumber
 
@@ -34,17 +27,21 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set scrolloff=8
+set splitright
+set splitbelow
 
 set clipboard=unnamedplus
-autocmd FileType cpp setlocal makeprg=g\+\+\ %\ \-g\ \-std\=c\+\+17\ \-Wall
+set foldmethod=marker
 
 nnoremap <space> <nop>
 let mapleader=" "
-" PLUGINS ---------------------------------------------------------------- {{{
+"}}}
 
+"{{{ vim-plug
 call plug#begin('~/.vim/plugged')
 Plug 'sheerun/vim-polyglot'
 Plug 'morhetz/gruvbox'
+Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'vimwiki/vimwiki'
@@ -52,31 +49,43 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
 Plug 'shumphrey/fugitive-gitlab.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/gv.vim'
 Plug 'stsewd/fzf-checkout.vim'
-Plug 'airblade/vim-rooter'
+" Plug 'airblade/vim-rooter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mbbill/undotree'
 Plug 'dbeniamine/cheat.sh-vim'
+Plug 'voldikss/vim-floaterm'
+Plug 'mhinz/vim-startify'
+Plug 'vuciv/vim-bujo'
+Plug 'chrisbra/Colorizer'
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'vim-utils/vim-man'
+Plug 'kergoth/vim-bitbake'
 call plug#end()
+"}}}
 
-" }}}
-
+"{{{ colorscheme
 colorscheme gruvbox
 set background=dark
-" vim-airline settings --------------------------------------------------------
-let g:airline_theme='molokai'
+hi Normal guibg=NONE ctermbg=NONE
+"}}}
+
+"{{{ vim-airline
+let g:airline_theme='bubblegum'
 let g:airline_powerline_fonts = 1
 let g:airline_skip_empty_sections = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
-
 " unicode symbols
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
@@ -90,7 +99,6 @@ let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.paste = 'Þ'
 let g:airline_symbols.paste = '∥'
 let g:airline_symbols.whitespace = 'Ξ'
-
 " airline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
@@ -99,35 +107,65 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
-
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-" vim-airline settings end ---------------------------------------------------
+"}}}
 
+"{{{ other plugins settings
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
-
 let g:is_posix = 1
-
 let g:fugitive_gitlab_domains = {'ssh://git.ci.motional.com': 'https://gitlab.ci.motional.com'}
 
+" bujo
+nmap <Leader>tc <Plug>BujoChecknormal
+nmap <Leader>ta <Plug>BujoAddnormal
+let g:bujo#todo_file_path = $HOME . "/.cache/bujo"
+
+" netrw
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_sort_sequence = '[\/]$,*'
+let g:netrw_browse_split = 4
+
+" NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeShowHidden=1
-nnoremap <leader>nt :NERDTreeToggle<CR>
 
-nnoremap <leader>f :GFiles<CR>
-nnoremap <leader>b :Buffers<cr>
-nnoremap <leader>l :BLines<cr>
-nnoremap <leader>rg :Rg<cr>
-nnoremap <leader>gb :GBranches<cr>
-nnoremap <F2> :Maps<cr>
+" Floaterm
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_prev   = '<F8>'
+let g:floaterm_keymap_next   = '<F9>'
+let g:floaterm_keymap_toggle = '<F12>'
+let g:floaterm_autoclose = 1
 
+let g:startify_bookmarks = [
+            \ { 'i': '~/.config/i3/config' },
+            \ { 'v': '~/.vimrc' },
+            \ { 't': '~/.tmux.conf' },
+            \ { 'z': '~/.zshrc' },
+            \ { 'w': '~/vimwiki/index.md' },
+            \ '~/repo/personal',
+            \ '~/repo/agent',
+            \ '~/repo/av-stack',
+            \ ]
+
+let g:startify_lists = [
+      \ { 'header': ['   Bookmarks'],      'type': 'bookmarks' },
+      \ { 'header': ['   MRU'],            'type': 'files' },
+      \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+      \ ]
+
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+"}}}
+
+"{{{ key mappings
 " Quicker window movement
 nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 nnoremap <leader>h <C-w>h
 nnoremap <leader>l <C-w>l
 nnoremap <leader>wf :w!<cr>
-nnoremap <leader>q :q<cr>
+nnoremap <leader>q :bd<cr>
 nnoremap <leader>wq :wq<cr>
 " Vertical and horizontal splits
 nnoremap <leader>vs <C-w>v
@@ -136,16 +174,13 @@ nnoremap <silent> <leader>+ :vertical resize +5<CR>
 nnoremap <silent> <leader>- :vertical resize -5<CR>
 nnoremap <S-l> :bnext<CR>
 nnoremap <S-h> :bprevious<CR>
-
-nnoremap <leader>u :UndotreeShow<CR>
-
+nnoremap <leader>u :bprevious<CR>
 nnoremap <leader>ve :edit ~/.vimrc<cr>
-
+tnoremap <leader><esc> <C-\><C-n>
 " Keep it centered
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
-
 vnoremap < <gv
 vnoremap > >gv
 vnoremap p "_dP
@@ -153,11 +188,28 @@ vnoremap y myy`y
 vnoremap Y myY`y
 nnoremap Y y$
 nnoremap <leader>xo :!xdg-open %<cr><cr>
+nnoremap <C-a> <esc>ggVG
 imap jk <esc>
 imap ;; <esc>A;<esc>
 nmap <silent> gf :edit <cfile><cr>
-nmap <leader>Q :bufdo bdelete<cr>
+nmap <leader>Q :FloatermKill!<cr>:bufdo bdelete<cr>:qa<cr>
+imap <F5> <esc> :w <cr> :FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
+nmap <F5> <esc> :w <cr> :FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
+nnoremap <leader>nt :NERDTreeToggle %<CR>
+nmap <silent> <leader><cr> :noh<cr>
+nnoremap <leader>f :GFiles<CR>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>l :BLines<cr>
+nnoremap <leader>rg :Rg<cr>
+nnoremap <leader>gb :GBranches<cr>
+nmap <F2> :Maps<cr>
+cnoremap w!! w !sudo tee > /dev/null %
 
+" vim-repeat
+silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+"}}}
+
+"{{{ coc.vim
 autocmd ColorScheme * highlight CocErrorFloat guifg=#ffffff
 autocmd ColorScheme * highlight CocInfoFloat guifg=#ffffff
 autocmd ColorScheme * highlight CocWarningFloat guifg=#ffffff
@@ -278,6 +330,5 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+"}}}
 
-noremap <F3> <esc> :w <cr> :make <cr>
-noremap <F5> <esc> :w <cr> :!g++ -fsanitize=address -std=c++17 -Wall -Wextra -Wshadow -O2 -o %< % && ./%< <cr>
