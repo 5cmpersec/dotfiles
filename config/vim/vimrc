@@ -206,8 +206,8 @@ imap jk <esc>
 imap ;; <esc>A;<esc>
 nmap <silent> gf :edit <cfile><cr>
 nmap <leader>Q :FloatermKill!<cr>:bufdo bdelete<cr>:qa<cr>
-imap <F5> <esc> :w <cr> :FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
-nmap <F5> <esc> :w <cr> :FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
+imap <F3> <esc>:w<cr>:FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
+nmap <F3> <esc>:w<cr>:FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
 nnoremap <leader>nt :NERDTreeToggle %<CR>
 nmap <silent> <leader><cr> :noh<cr>
 nnoremap <leader>f :GFiles<CR>
