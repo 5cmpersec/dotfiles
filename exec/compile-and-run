@@ -8,13 +8,14 @@ extension="${filename##*.}"
 echo $file
 
 tempfile="$(mktemp /tmp/${filename}.XXXXXX)"
-echo ${tempfile}
 trap 'rm -rf -- "${tempfile}"' EXIT
 
 if [[ ${extension} == "cpp" ]]; then
-  g++ -fsanitize=address -std=c++17 -Wall -Wextra -shadow -O2 ${file} -o ${tempfile} && time ${tempfile}
+  g++ -std=c++17 -Wall -Wextra -Wshadow -O2 ${file} -o ${tempfile} && ${tempfile}
 else
   echo "Filetype is not supported"
   exit 1
 fi
+echo "----------------------------"
+
 

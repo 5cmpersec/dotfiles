@@ -1,6 +1,4 @@
-vim9script
-# zR to unfold all
-#{{{ basic settings
+"{{{ basic settings
 set nocompatible
 set encoding=utf-8
 
@@ -37,23 +35,23 @@ set clipboard=unnamed
 set foldmethod=marker
 
 nnoremap <space> <nop>
-g:mapleader = " "
+let mapleader=" "
 
 set omnifunc=ale#completion#OmniFunc
-g:airline#extensions#ale#enabled = 1
-g:ale_completion_enabled = 1
-g:ale_cpp_clangd_options = '-std=c++17 -Wall'
-g:ale_sign_error = '✗'
-g:ale_sign_warning = '⚡ '
+let g:airline#extensions#ale#enabled = 1
+let g:ale_completion_enabled = 1
+let g:ale_cpp_clangd_options = '-std=c++17 -Wall'
+let g:ale_sign_error = '✗'
+let g:ale_sign_warning = '⚡ '
 
-g:ale_linters = {'rust': ['analyzer'], 'cpp': ['clangd']}
-g:ale_fixers = {'rust': ['rustfmt'], 'cpp': ['clang-format']}
-g:rustfmt_autosave = 1
-g:ale_fix_on_save = 1
-#}}}
+let g:ale_linters = {'rust': ['analyzer'], 'cpp': ['clangd']}
+let g:ale_fixers = {'rust': ['rustfmt'], 'cpp': ['clang-format']}
+let g:rustfmt_autosave = 1
+let g:ale_fix_on_save = 1
+"}}}
 
-#{{{ vim-plug
-plug#begin('~/.vim/plugged')
+"{{{ vim-plug
+call plug#begin('~/.vim/plugged')
 Plug 'sheerun/vim-polyglot'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -88,97 +86,97 @@ Plug 'dense-analysis/ale'
 Plug 'rust-lang/rust.vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-plug#end()
-#}}}
+call plug#end()
+"}}}
 
-#{{{ colorscheme
+"{{{ colorscheme
 colorscheme gruvbox
 set background=dark
 hi Normal guibg=NONE ctermbg=NONE
-#}}}
+"}}}
 
-#{{{ vim-airline
-g:airline_theme = 'bubblegum'
-g:airline_powerline_fonts = 1
-g:airline_skip_empty_sections = 1
+"{{{ vim-airline
+let g:airline_theme='bubblegum'
+let g:airline_powerline_fonts = 1
+let g:airline_skip_empty_sections = 1
 if !exists('g:airline_symbols')
-    g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
-# unicode symbols
-g:airline_left_sep = '»'
-g:airline_left_sep = '▶'
-g:airline_right_sep = '«'
-g:airline_right_sep = '◀'
-g:airline_symbols.linenr = '␊'
-g:airline_symbols.linenr = '␤'
-g:airline_symbols.linenr = '¶'
-g:airline_symbols.branch = '⎇'
-g:airline_symbols.paste = 'ρ'
-g:airline_symbols.paste = 'Þ'
-g:airline_symbols.paste = '∥'
-g:airline_symbols.whitespace = 'Ξ'
-# airline symbols
-g:airline_left_sep = ''
-g:airline_left_alt_sep = ''
-g:airline_right_sep = ''
-g:airline_right_alt_sep = ''
-g:airline_symbols.branch = ''
-g:airline_symbols.readonly = ''
-g:airline_symbols.linenr = ''
-g:airline#extensions#tabline#enabled = 1
-g:airline#extensions#tabline#buffer_nr_show = 1
-#}}}
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+"}}}
 
-#{{{ other plugins settings
+"{{{ other plugins settings
 
-g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
-g:is_posix = 1
-g:fugitive_gitlab_domains = {'ssh://git.ci.motional.com': 'https://gitlab.ci.motional.com'}
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:is_posix = 1
+let g:fugitive_gitlab_domains = {'ssh://git.ci.motional.com': 'https://gitlab.ci.motional.com'}
 
-# netrw
-g:netrw_banner = 0
-g:netrw_liststyle = 3
-g:netrw_sort_sequence = '[\/]$,*'
-g:netrw_browse_split = 4
+" netrw
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_sort_sequence = '[\/]$,*'
+let g:netrw_browse_split = 4
 
-# NERDTree
-g:NERDTreeMinimalUI = 1
-g:NERDTreeShowHidden = 1
+" NERDTree
+let NERDTreeMinimalUI = 1
+let NERDTreeShowHidden=1
 
-# Floaterm
-g:floaterm_keymap_new    = '<F7>'
-g:floaterm_keymap_prev   = '<F8>'
-g:floaterm_keymap_next   = '<F9>'
-g:floaterm_keymap_toggle = '<F12>'
-g:floaterm_autoclose = 1
+" Floaterm
+let g:floaterm_keymap_new    = '<F7>'
+let g:floaterm_keymap_prev   = '<F8>'
+let g:floaterm_keymap_next   = '<F9>'
+let g:floaterm_keymap_toggle = '<F12>'
+let g:floaterm_autoclose = 1
 
-g:startify_bookmarks = [
-    { 'v': '~/.vimrc' },
-    { 't': '~/.tmux.conf' },
-    { 'z': '~/.zshrc' },
-    { 'w': '~/vimwiki/index.md' },
-    '~/repo/personal',
-    '~/repo/agent',
-    '~/repo/av-stack',
-    ]
+let g:startify_bookmarks = [
+            \ { 'v': '~/.vimrc' },
+            \ { 't': '~/.tmux.conf' },
+            \ { 'z': '~/.zshrc' },
+            \ { 'w': '~/vimwiki/index.md' },
+            \ '~/repo/personal',
+            \ '~/repo/agent',
+            \ '~/repo/av-stack',
+            \ ]
 
-g:startify_lists = [
-    { 'header': ['   Bookmarks'],      'type': 'bookmarks' },
-    { 'header': ['   MRU'],            'type': 'files' },
-    { 'header': ['   MRU ' .. getcwd()], 'type': 'dir' },
-    ]
+let g:startify_lists = [
+      \ { 'header': ['   Bookmarks'],      'type': 'bookmarks' },
+      \ { 'header': ['   MRU'],            'type': 'files' },
+      \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+      \ ]
 
-# UltiSnips
-g:UltiSnipsExpandTrigger = "<tab>"
-g:UltiSnipsJumpForwardTrigger = "<c-b>"
-g:UltiSnipsJumpBackwardTrigger = "<c-z>"
-g:UltiSnipsSnippetDirectories = ["~/.UltiSnips"]
+" UltiSnips
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<c-b>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-z>"
+let g:UltiSnipsSnippetDirectories = ["~/.UltiSnips"]
 
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-#}}}
+"}}}
 
-#{{{ key mappings
-# Quicker window movement
+"{{{ key mappings
+" Quicker window movement
 nnoremap <leader>j <C-w>j
 nnoremap <leader>k <C-w>k
 nnoremap <leader>h <C-w>h
@@ -186,7 +184,7 @@ nnoremap <leader>l <C-w>l
 nnoremap <leader>wf :w!<cr>
 nnoremap <leader>q :bd<cr>
 nnoremap <leader>wq :wq<cr>
-# Vertical and horizontal splits
+" Vertical and horizontal splits
 nnoremap <leader>vs <C-w>v
 nnoremap <leader>xs <C-w>S
 nnoremap <silent> <leader>+ :vertical resize +5<CR>
@@ -196,7 +194,7 @@ nnoremap <S-h> :bprevious<CR>
 nnoremap <leader>u :bprevious<CR>
 nnoremap <leader>ve :edit ~/.vimrc<cr>
 tnoremap <leader><esc> <C-\><C-n>
-# Keep it centered
+" Keep it centered
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap J mzJ`z
@@ -217,7 +215,6 @@ nmap <F3> <esc>:w<cr>:FloatermNew --autoclose=0 --position=bottom --height=0.4 -
 nnoremap <leader>nt :NERDTreeToggle %<CR>
 nmap <silent> <leader><cr> :noh<cr>
 nnoremap <leader>f :GFiles<CR>
-nnoremap <leader>F :Files<CR>
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>l :BLines<cr>
 nnoremap <leader>rg :Rg<cr>
@@ -225,7 +222,7 @@ nnoremap <leader>gb :GBranches<cr>
 nmap <F2> :Maps<cr>
 cnoremap w!! w !sudo tee > /dev/null %
 
-# vim-repeat
-silent! repeat#set("\<Plug>MyWonderfulMap", v:count)
-#}}}
+" vim-repeat
+silent! call repeat#set("\<Plug>MyWonderfulMap", v:count)
+"}}}
 
