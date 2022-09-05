@@ -8,6 +8,7 @@ filetype indent plugin on
 syntax on
 set mouse=a
 
+set cursorline
 set hidden
 set wildmenu
 set wildmode=longest:full,full
@@ -37,25 +38,18 @@ set clipboard=unnamed
 set foldmethod=marker
 
 nnoremap <space> <nop>
-g:mapleader = " "
-
-set omnifunc=ale#completion#OmniFunc
-g:airline#extensions#ale#enabled = 1
-g:ale_completion_enabled = 1
-g:ale_cpp_clangd_options = '-std=c++17 -Wall'
-g:ale_sign_error = '✗'
-g:ale_sign_warning = '⚡ '
-
-g:ale_linters = {'rust': ['analyzer'], 'cpp': ['clangd']}
-g:ale_fixers = {'rust': ['rustfmt'], 'cpp': ['clang-format']}
-g:rustfmt_autosave = 1
-g:ale_fix_on_save = 1
+g:mapleader = ' '
 #}}}
 
 #{{{ vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 plug#begin('~/.vim/plugged')
 Plug 'sheerun/vim-polyglot'
 Plug 'morhetz/gruvbox'
+Plug 'ghifarit53/tokyonight-vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -83,22 +77,26 @@ Plug 'mhinz/vim-startify'
 Plug 'chrisbra/Colorizer'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'vim-utils/vim-man'
-Plug 'kergoth/vim-bitbake'
-Plug 'dense-analysis/ale'
-Plug 'rust-lang/rust.vim'
-Plug 'SirVer/ultisnips'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets'
 plug#end()
 #}}}
 
 #{{{ colorscheme
-colorscheme gruvbox
-set background=dark
-hi Normal guibg=NONE ctermbg=NONE
+# colorscheme gruvbox
+# set background=dark
+# hi Normal guibg=NONE ctermbg=NONE
+
+set termguicolors
+g:tokyonight_style = 'storm' # available: night, storm
+g:tokyonight_enable_italic = 1
+g:tokyonight_current_word = 'italic'
+colorscheme tokyonight
 #}}}
 
 #{{{ vim-airline
-g:airline_theme = 'bubblegum'
+# g:airline_theme = 'bubblegum'
+g:airline_theme = 'tokyonight'
 g:airline_powerline_fonts = 1
 g:airline_skip_empty_sections = 1
 if !exists('g:airline_symbols')
@@ -153,13 +151,11 @@ g:floaterm_keymap_toggle = '<F12>'
 g:floaterm_autoclose = 1
 
 g:startify_bookmarks = [
-    { 'v': '~/.vimrc' },
-    { 't': '~/.tmux.conf' },
+    { 'v': '~/.vim/vimrc' },
+    { 't': '~/.config/tmux/tmux.conf' },
     { 'z': '~/.zshrc' },
     { 'w': '~/vimwiki/index.md' },
     '~/repo/personal',
-    '~/repo/agent',
-    '~/repo/av-stack',
     ]
 
 g:startify_lists = [
@@ -167,14 +163,8 @@ g:startify_lists = [
     { 'header': ['   MRU'],            'type': 'files' },
     { 'header': ['   MRU ' .. getcwd()], 'type': 'dir' },
     ]
-
-# UltiSnips
-g:UltiSnipsExpandTrigger = "<tab>"
-g:UltiSnipsJumpForwardTrigger = "<c-b>"
-g:UltiSnipsJumpBackwardTrigger = "<c-z>"
-g:UltiSnipsSnippetDirectories = ["~/.UltiSnips"]
-
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+g:startify_files_number = 4
+nnoremap <silent> <leader> :WhichKey '<Space>'<cr>
 #}}}
 
 #{{{ key mappings
@@ -189,12 +179,12 @@ nnoremap <leader>wq :wq<cr>
 # Vertical and horizontal splits
 nnoremap <leader>vs <C-w>v
 nnoremap <leader>xs <C-w>S
-nnoremap <silent> <leader>+ :vertical resize +5<CR>
-nnoremap <silent> <leader>- :vertical resize -5<CR>
-nnoremap <S-l> :bnext<CR>
-nnoremap <S-h> :bprevious<CR>
-nnoremap <leader>u :bprevious<CR>
-nnoremap <leader>ve :edit ~/.vimrc<cr>
+nnoremap <silent> <leader>+ :vertical resize +5<cr>
+nnoremap <silent> <leader>- :vertical resize -5<cr>
+nnoremap <S-l> :bnext<cr>
+nnoremap <S-h> :bprevious<cr>
+nnoremap <leader>u :bprevious<cr>
+nnoremap <leader>ve :edit ~/.vim/vimrc<cr>
 tnoremap <leader><esc> <C-\><C-n>
 # Keep it centered
 nnoremap n nzzzv
@@ -204,28 +194,50 @@ vnoremap < <gv
 vnoremap > >gv
 vnoremap p "_dP
 vnoremap y myy`y
+vnoremap <leader>y myy`y:call system("wl-copy -n", @")<cr>
 vnoremap Y myY`y
 nnoremap Y y$
+nnoremap <leader>p :let @"=system("wl-paste -n")<cr>""P
 nnoremap <leader>xo :!xdg-open %<cr><cr>
 nnoremap <C-a> <esc>ggVG
 imap jk <esc>
-imap ;; <esc>A;<esc>
 nmap <silent> gf :edit <cfile><cr>
 nmap <leader>Q :FloatermKill!<cr>:bufdo bdelete<cr>:qa<cr>
 imap <F3> <esc>:w<cr>:FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
 nmap <F3> <esc>:w<cr>:FloatermNew --autoclose=0 --position=bottom --height=0.4 --width=0.9 compile-and-run %<cr>
-nnoremap <leader>nt :NERDTreeToggle %<CR>
+nnoremap <leader>nt :NERDTreeToggle %<cr>
 nmap <silent> <leader><cr> :noh<cr>
-nnoremap <leader>f :GFiles<CR>
-nnoremap <leader>F :Files<CR>
+nnoremap <leader>f :GFiles<cr>
+nnoremap <leader>F :Files<cr>
 nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>l :BLines<cr>
 nnoremap <leader>rg :Rg<cr>
 nnoremap <leader>gb :GBranches<cr>
 nmap <F2> :Maps<cr>
 cnoremap w!! w !sudo tee > /dev/null %
-
 # vim-repeat
 silent! repeat#set("\<Plug>MyWonderfulMap", v:count)
 #}}}
 
+#{{{ coc.vim settings
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=yes
+
+inoremap <expr> <Tab> coc#pum#visible() ? coc#pum#next(1) : "\<Tab>"
+inoremap <expr> <S-Tab> coc#pum#visible() ? coc#pum#prev(1) : "\<S-Tab>"
+inoremap <silent><expr> <c-@> coc#refresh()
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>"
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+nnoremap <silent> K :call CocActionAsync('doHover')<cr>
+autocmd CursorHold * silent call CocActionAsync('highlight')
+nmap <leader>rn <Plug>(coc-rename)
+#}}}
